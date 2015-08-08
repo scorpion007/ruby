@@ -1088,6 +1088,7 @@ size_t rb_strftime(char *s, size_t maxsize, const char *format, rb_encoding *enc
 
 /* string.c */
 void Init_frozen_strings(void);
+void Cleanup_frozen_strings(void);
 VALUE rb_fstring(VALUE);
 VALUE rb_fstring_new(const char *ptr, long len);
 #define rb_fstring_lit(str) rb_fstring_new((str), rb_strlen_lit(str))

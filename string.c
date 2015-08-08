@@ -9305,3 +9305,12 @@ Init_frozen_strings(void)
     assert(!frozen_strings);
     frozen_strings = st_init_table_with_size(&fstring_hash_type, 1000);
 }
+
+void
+Cleanup_frozen_strings(void)
+{
+    assert(frozen_strings);
+    st_free_table(frozen_strings);
+    frozen_strings = NULL;
+}
+

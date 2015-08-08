@@ -33,6 +33,8 @@ ID ruby_static_id_signo, ruby_static_id_status;
 #include "eval_error.c"
 #include "eval_jump.c"
 
+static ruby_initialized = 0;
+
 #define CLASS_OR_MODULE_P(obj) \
     (!SPECIAL_CONST_P(obj) && \
      (BUILTIN_TYPE(obj) == T_CLASS || BUILTIN_TYPE(obj) == T_MODULE))
@@ -44,12 +46,11 @@ ID ruby_static_id_signo, ruby_static_id_status;
 int
 ruby_setup(void)
 {
-    static int initialized = 0;
     int state;
 
-    if (initialized)
+    if (ruby_initialized)
 	return 0;
-    initialized = 1;
+    ruby_initialized = 1;
 
     ruby_init_stack((void *)&state);
     Init_BareVM();
@@ -230,6 +231,11 @@ ruby_cleanup(volatile int ex)
     ruby_vm_destruct(GET_VM());
     if (state) ruby_default_signal(state);
 
+    /* cleanup builtin modules */
+    Cleanup_frozen_strings();
+    
+    ruby_initialized = 0;
+    
     return sysex;
 }
 
