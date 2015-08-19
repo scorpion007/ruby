@@ -40,6 +40,7 @@
 #include <shlobj.h>
 #include <mbstring.h>
 #include <shlwapi.h>
+#include <strsafe.h>
 #if _MSC_VER >= 1400
 #include <crtdbg.h>
 #include <rtcapi.h>
@@ -4685,9 +4686,9 @@ rb_w32_wreadlink(const WCHAR *path, WCHAR *buf, size_t bufsize)
 	};
     } rp;
     HANDLE f;
-    DWORD ret;
+    DWORD ret = 0;
     int e = 0;
-
+	void *name = NULL;
     typedef BOOL (WINAPI *device_io_control_func)(HANDLE, DWORD, LPVOID,
 						  DWORD, LPVOID, DWORD,
 						  LPDWORD, LPOVERLAPPED);
@@ -4715,12 +4716,17 @@ rb_w32_wreadlink(const WCHAR *path, WCHAR *buf, size_t bufsize)
 			 &rp, sizeof(rp), &ret, NULL)) {
 	e = map_errno(GetLastError());
     }
+    else if (rp.ReparseTag == IO_REPARSE_TAG_DEDUP){
+        /* This is a data-dedup reparse point. No special name handling needed. */
+        HRESULT hr = StringCchCopyW(buf, bufsize, path);
+        assert(SUCCEEDED(hr));
+        ret = bufsize;
+    }
     else if (rp.ReparseTag != IO_REPARSE_TAG_SYMLINK &&
 	     rp.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT){
 	e = EINVAL;
     }
     else {
-	void *name;
 	if (rp.ReparseTag == IO_REPARSE_TAG_SYMLINK) {
 	    name = ((char *)rp.SymbolicLinkReparseBuffer.PathBuffer +
 		    rp.SymbolicLinkReparseBuffer.PrintNameOffset);
