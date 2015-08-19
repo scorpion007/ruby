@@ -655,13 +655,18 @@ exit_handler(void)
 {
     if (NtSocketsInitialized) {
 	WSACleanup();
+    /* There is no need to call any CRT free() APIs since the whole heap is
+       being thrown away on VM shutdown */
+#if 0
 	if (socklist) {
 	    st_free_table(socklist);
 	    socklist = NULL;
 	}
+#endif
 	DeleteCriticalSection(&select_mutex);
 	NtSocketsInitialized = 0;
     }
+#if 0
     if (conlist && conlist != conlist_disabled) {
 	st_foreach(conlist, free_conlist, 0);
 	st_free_table(conlist);
@@ -671,6 +676,7 @@ exit_handler(void)
 	free(uenvarea);
 	uenvarea = NULL;
     }
+#endif
 }
 
 /* License: Artistic or GPL */
