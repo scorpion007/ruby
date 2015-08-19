@@ -69,7 +69,9 @@ extern "C" {
 #define calloc rb_calloc
 #define realloc rb_realloc
 #define free rb_free
+#ifndef strdup
 #define strdup rb_strdup
+#endif
 #define wcsdup rb_wcsdup
 
 #ifdef _WIN32
@@ -78,8 +80,6 @@ size_t rb_w32_msize(void* p);
 #endif
 
 /* alloc.c */
-void rb_init_global_heap(void);
-void rb_cleanup_global_heap(void);
 void* rb_malloc(size_t n);
 void* rb_realloc(void* ptr, size_t n);
 void* rb_calloc(size_t num, size_t size);
