@@ -42,7 +42,9 @@ EXTSOLIBS     =
 MINIOBJS      = $(ARCHMINIOBJS) miniinit.$(OBJEXT) dmyext.$(OBJEXT) miniprelude.$(OBJEXT)
 ENC_MK        = enc.mk
 
-COMMONOBJS    = array.$(OBJEXT) \
+COMMONOBJS    = \
+        alloc.$(OBJEXT) \
+        array.$(OBJEXT) \
 		bignum.$(OBJEXT) \
 		class.$(OBJEXT) \
 		compar.$(OBJEXT) \

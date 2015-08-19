@@ -101,6 +101,8 @@
 #undef xfree
 #endif
 
+#include "internal.h"
+
 /* */
 /* escape other system UChar definition */
 #ifdef ONIG_ESCAPE_UCHAR_COLLISION
@@ -162,10 +164,10 @@ extern pthread_mutex_t gOnigMutex;
 #endif /* USE_DEFAULT_MULTI_THREAD_SYSTEM */
 
 #ifndef xmalloc
-#define xmalloc     malloc
-#define xrealloc    realloc
-#define xcalloc     calloc
-#define xfree       free
+#define xmalloc     rb_malloc
+#define xrealloc    rb_realloc
+#define xcalloc     rb_calloc
+#define xfree       rb_free
 #endif
 
 #ifdef RUBY

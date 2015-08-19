@@ -1148,7 +1148,7 @@ node_new(void)
   THREAD_ATOMIC_END;
 #endif
 
-  node = (Node* )xmalloc(sizeof(Node));
+  node = xmalloc(sizeof(Node));
   /* xmemset(node, 0, sizeof(Node)); */
   return node;
 }

@@ -65,6 +65,28 @@ extern "C" {
 # define VALGRIND_MAKE_MEM_UNDEFINED(p, n) 0
 #endif
 
+#define malloc rb_malloc
+#define calloc rb_calloc
+#define realloc rb_realloc
+#define free rb_free
+#define strdup rb_strdup
+#define wcsdup rb_wcsdup
+
+#ifdef _WIN32
+#define _msize rb_w32_msize
+size_t rb_w32_msize(void* p);
+#endif
+
+/* alloc.c */
+void rb_init_global_heap(void);
+void rb_cleanup_global_heap(void);
+void* rb_malloc(size_t n);
+void* rb_realloc(void* ptr, size_t n);
+void* rb_calloc(size_t num, size_t size);
+void rb_free(void* p);
+char* rb_strdup(const char* s);
+wchar_t* rb_wcsdup(const wchar_t* s);
+
 #define numberof(array) ((int)(sizeof(array) / sizeof((array)[0])))
 
 #define GCC_VERSION_SINCE(major, minor, patchlevel) \
