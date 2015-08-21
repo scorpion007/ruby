@@ -59,7 +59,13 @@ ruby_setup(void)
 
     PUSH_TAG();
     if ((state = EXEC_TAG()) == 0) {
+
+    /* initialize core modules */
 	rb_call_inits();
+
+    /* initialize extension modules as builtins */
+	rb_call_inits_ext();
+    
 	ruby_prog_init();
 	GET_VM()->running = 1;
     }

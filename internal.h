@@ -868,6 +868,9 @@ VALUE rb_hash_values(VALUE hash);
 /* inits.c */
 void rb_call_inits(void);
 
+/* initsext.c */
+void rb_call_inits_ext(void);
+
 /* io.c */
 const char *ruby_get_inplace_mode(void);
 void ruby_set_inplace_mode(const char *);

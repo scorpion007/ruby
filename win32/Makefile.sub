@@ -229,7 +229,41 @@ XLDFLAGS = -stack:$(STACK)
 RFLAGS = -r
 !endif
 !if !defined(EXTLIBS)
-EXTLIBS =
+EXTLIBS = \
+    ext\bigdecimal\bigdecimal.lib \
+    ext\continuation\continuation.lib \
+    ext\coverage\coverage.lib \
+    ext\date\date_core.lib \
+    ext\digest\digest.lib \
+    ext\digest\bubblebabble\bubblebabble.lib \
+    ext\digest\md5\md5.lib \
+    ext\digest\rmd160\rmd160.lib \
+    ext\digest\sha1\sha1.lib \
+    ext\digest\sha2\sha2.lib \
+    ext\etc\etc.lib \
+    ext\fcntl\fcntl.lib \
+    ext\fiber\fiber.lib \
+    ext\io\console\console.lib \
+    ext\io\nonblock\nonblock.lib \
+    ext\json\generator\generator.lib \
+    ext\json\parser\parser.lib \
+    ext\mathn\complex\complex.lib \
+    ext\mathn\rational\rational.lib \
+    ext\nkf\nkf.lib \
+    ext\objspace\objspace.lib \
+    ext\pathname\pathname.lib \
+    ext\psych\psych.lib \
+    ext\racc\cparse\cparse.lib \
+    ext\rbconfig\sizeof\sizeof.lib \
+    ext\ripper\ripper.lib \
+    ext\sdbm\sdbm.lib \
+    ext\socket\socket.lib \
+    ext\stringio\stringio.lib \
+    ext\strscan\strscan.lib \
+    ext\thread\thread.lib \
+    ext\win32ole\win32ole.lib \
+    enc\libenc.lib \
+    enc\libtrans.lib
 !endif
 !if !defined(EXTSOLIBS)
 EXTSOLIBS =
@@ -239,7 +273,7 @@ LIBS = user32.lib advapi32.lib shell32.lib ws2_32.lib ole32.lib oleaut32.lib
 !if $(MSC_VER) >= 1400
 LIBS = $(LIBS) iphlpapi.lib
 !endif
-LIBS = $(LIBS) imagehlp.lib shlwapi.lib $(EXTLIBS)
+LIBS = $(LIBS) imagehlp.lib shlwapi.lib
 !endif
 !if !defined(MISSING)
 MISSING = crypt.obj ffs.obj langinfo.obj lgamma_r.obj strlcat.obj strlcpy.obj win32/win32.obj win32/file.obj setproctitle.obj
@@ -1004,12 +1038,12 @@ $(LIBRUBY):	$(RUBYDEF)
 		$(ECHO) linking import-library $(@:\=/)
 		$(Q) $(AR) $(ARFLAGS)$@ -def:$(RUBYDEF)
 
-$(LIBRUBY_SO):	$(LIBRUBY_A) $(DLDOBJS) $(RUBYDEF) $(RUBY_SO_NAME).res
+$(LIBRUBY_SO):	$(LIBRUBY_A) $(DLDOBJS) $(RUBYDEF) $(RUBY_SO_NAME).res initsext.$(OBJEXT)
 		@echo $(DLDOBJS)
 		@-$(PRE_LIBRUBY_UPDATE)
 		$(ECHO) linking shared-library $(@:\=/)
 		$(Q) $(LDSHARED) $(MAINOBJ) $(DLDOBJS) $(LIBRUBY_A) \
-			$(RUBY_SO_NAME).res $(LIBS) -Fe$@ -link $(LDFLAGS) \
+			$(RUBY_SO_NAME).res $(LIBS) $(EXTLIBS) initsext.$(OBJEXT) -Fe$@ -link $(LDFLAGS) \
 			$(LIBRUBY_DLDFLAGS)
 		@$(RM) dummy.lib dummy.exp
 		$(Q) $(LDSHARED_0)
