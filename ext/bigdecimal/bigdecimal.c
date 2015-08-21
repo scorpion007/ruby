@@ -109,7 +109,7 @@ rb_rational_num(VALUE rat)
 #ifdef HAVE_TYPE_STRUCT_RRATIONAL
     return RRATIONAL(rat)->num;
 #else
-    return rb_funcall(rat, rb_intern("numerator"));
+    return rb_funcall(rat, rb_intern("numerator"), 0);
 #endif
 }
 #endif
@@ -121,7 +121,7 @@ rb_rational_den(VALUE rat)
 #ifdef HAVE_TYPE_STRUCT_RRATIONAL
     return RRATIONAL(rat)->den;
 #else
-    return rb_funcall(rat, rb_intern("denominator"));
+    return rb_funcall(rat, rb_intern("denominator"), 0);
 #endif
 }
 #endif
