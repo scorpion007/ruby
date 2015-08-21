@@ -1030,9 +1030,9 @@ $(STUBPROGRAM):	win32/stub.$(OBJEXT) $(LIBRUBY) $(LIBRUBY_SO) $(RUBY_INSTALL_NAM
 		$(Q) $(LDSHARED_2)
 !endif
 
-$(LIBRUBY_A):	$(OBJS) $(INITOBJS)
+$(LIBRUBY_A):	$(OBJS) $(INITOBJS) initsext.$(OBJEXT)
 		$(ECHO) linking static-library $(@:\=/)
-		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS)
+		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS) initsext.$(OBJEXT)
 
 $(LIBRUBY):	$(RUBYDEF)
 		$(ECHO) linking import-library $(@:\=/)
