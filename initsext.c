@@ -18,9 +18,16 @@ void
 rb_call_inits_ext(void)
 {
     VALUE load_path = GET_VM()->load_path;
+
+    /* initialize the load paths for the build drop so nmake install succeeds */
 	rb_ary_push(load_path, rb_str_new2(".ext/common"));
 	rb_ary_push(load_path, rb_str_new2("lib"));
 	rb_ary_push(load_path, rb_str_new2("."));
+
+    /* initialize the standard search paths so that std libs can be found once
+       deployed. */
+    ruby_init_loadpath();
+    
     CALL(enc);
     CALL(bigdecimal);
     CALL(continuation);

@@ -42,4 +42,6 @@ void
 rb_call_inits_ext(void)
 {
     /* stub for miniruby */
+
+    ruby_init_loadpath();
 }
