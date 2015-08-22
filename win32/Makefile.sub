@@ -1028,20 +1028,20 @@ $(STUBPROGRAM):	win32/stub.$(OBJEXT) $(LIBRUBY) $(LIBRUBY_SO) $(RUBY_INSTALL_NAM
 		$(Q) $(LDSHARED_2)
 !endif
 
-$(LIBRUBY_A):	$(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
+$(LIBRUBY_A):	$(OBJS) $(INITOBJS)
 		$(ECHO) linking static-library $(@:\=/)
-		@echo $(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
-		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
+		@echo $(OBJS) $(INITOBJS)
+		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS)
 
 $(LIBRUBY):	$(RUBYDEF)
 		$(ECHO) linking import-library $(@:\=/)
 		$(Q) $(AR) $(ARFLAGS)$@ -def:$(RUBYDEF)
 
-$(LIBRUBY_SO):	$(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF)  
-		@echo $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF)  
+$(LIBRUBY_SO):	$(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF) ext\extinit.$(OBJEXT) $(ENCOBJS) 
+		@echo $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF) ext\extinit.$(OBJEXT) $(ENCOBJS)
 		@-$(PRE_LIBRUBY_UPDATE) $(EXTLIBS)
 		$(ECHO) linking shared-library $(@:\=/)
-		$(Q) $(LDSHARED) $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) \
+		$(Q) $(LDSHARED) $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) ext\extinit.$(OBJEXT) $(ENCOBJS) \
 			$(RUBY_SO_NAME).res $(LIBS) -Fe$@ -link $(LDFLAGS) \
 			$(LIBRUBY_DLDFLAGS)
 		@$(RM) dummy.lib dummy.exp
