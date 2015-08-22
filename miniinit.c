@@ -37,11 +37,3 @@ Init_enc(void)
     rb_encdb_declare("US-ASCII");
     rb_encdb_declare("UTF-8");
 }
-
-void
-rb_call_inits_ext(void)
-{
-    /* stub for miniruby */
-
-    ruby_init_loadpath();
-}

@@ -1387,13 +1387,8 @@ process_options(int argc, char **argv, struct cmdline_options *opt)
 #endif
 
     ruby_gc_set_params(opt->safe_level);
-
-    /* These are now done in rb_call_inits_ext because the extensions are
-       statically linked in.
-       
     ruby_init_loadpath_safe(opt->safe_level);
     Init_enc();
-    */
     
     lenc = rb_locale_encoding();
     rb_enc_associate(rb_progname, lenc);

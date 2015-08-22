@@ -6,6 +6,7 @@
 #define init(func, name) {	\
     extern void func(void);	\
     ruby_init_ext(name, func);	\
+    rb_provide(name); \
 }
 
 #define init_enc(name) init(Init_##name, "enc/"#name".so")

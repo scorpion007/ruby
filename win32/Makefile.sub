@@ -261,9 +261,7 @@ EXTLIBS = \
     ext\stringio\stringio.lib \
     ext\strscan\strscan.lib \
     ext\thread\thread.lib \
-    ext\win32ole\win32ole.lib \
-    enc\libenc.lib \
-    enc\libtrans.lib
+    ext\win32ole\win32ole.lib
 !endif
 !if !defined(EXTSOLIBS)
 EXTSOLIBS =
@@ -1030,20 +1028,21 @@ $(STUBPROGRAM):	win32/stub.$(OBJEXT) $(LIBRUBY) $(LIBRUBY_SO) $(RUBY_INSTALL_NAM
 		$(Q) $(LDSHARED_2)
 !endif
 
-$(LIBRUBY_A):	$(OBJS) $(INITOBJS) initsext.$(OBJEXT)
+$(LIBRUBY_A):	$(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
 		$(ECHO) linking static-library $(@:\=/)
-		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS) initsext.$(OBJEXT)
+		@echo $(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
+		$(Q) $(AR) $(ARFLAGS)$@ $(OBJS) $(INITOBJS) ext\extinit.$(OBJEXT) $(ENCOBJS)
 
 $(LIBRUBY):	$(RUBYDEF)
 		$(ECHO) linking import-library $(@:\=/)
 		$(Q) $(AR) $(ARFLAGS)$@ -def:$(RUBYDEF)
 
-$(LIBRUBY_SO):	$(LIBRUBY_A) $(DLDOBJS) $(RUBYDEF) $(RUBY_SO_NAME).res initsext.$(OBJEXT)
-		@echo $(DLDOBJS)
-		@-$(PRE_LIBRUBY_UPDATE)
+$(LIBRUBY_SO):	$(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF)  
+		@echo $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) $(RUBY_SO_NAME).res $(RUBYDEF)  
+		@-$(PRE_LIBRUBY_UPDATE) $(EXTLIBS)
 		$(ECHO) linking shared-library $(@:\=/)
-		$(Q) $(LDSHARED) $(MAINOBJ) $(DLDOBJS) $(LIBRUBY_A) \
-			$(RUBY_SO_NAME).res $(LIBS) $(EXTLIBS) initsext.$(OBJEXT) -Fe$@ -link $(LDFLAGS) \
+		$(Q) $(LDSHARED) $(MAINOBJ) $(LIBRUBY_A) $(EXTLIBS) \
+			$(RUBY_SO_NAME).res $(LIBS) -Fe$@ -link $(LDFLAGS) \
 			$(LIBRUBY_DLDFLAGS)
 		@$(RM) dummy.lib dummy.exp
 		$(Q) $(LDSHARED_0)
