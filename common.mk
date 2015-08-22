@@ -467,7 +467,7 @@ clear-installed-list: PHONY
 
 clean: clean-ext clean-enc clean-golf clean-rdoc clean-capi clean-extout clean-platform clean-local
 clean-local:: clean-runnable
-	$(Q)$(RM) $(OBJS) $(MINIOBJS) $(MAINOBJ) $(LIBRUBY_A) $(LIBRUBY_SO) $(LIBRUBY) $(LIBRUBY_ALIASES)
+	$(Q)$(RM) $(OBJS) $(MINIOBJS) initsext.$(OBJEXT) $(MAINOBJ) $(LIBRUBY_A) $(LIBRUBY_SO) $(LIBRUBY) $(LIBRUBY_ALIASES)
 	$(Q)$(RM) $(PROGRAM) $(WPROGRAM) miniruby$(EXEEXT) dmyext.$(OBJEXT) dmyenc.$(OBJEXT) $(ARCHFILE) .*.time
 	$(Q)$(RM) y.tab.c y.output encdb.h transdb.h config.log rbconfig.rb $(ruby_pc) probes.h probes.$(OBJEXT) probes.stamp ruby-glommed.$(OBJEXT)
 	$(Q)$(RM) GNUmakefile.old Makefile.old $(arch)-fake.rb $(ENC_TRANS_D)
@@ -477,6 +477,7 @@ clean-runnable:: PHONY
 	$(Q)$(CHDIR) lib 2>$(NULL) && $(RM) $(LIBRUBY_A) $(LIBRUBY) $(LIBRUBY_ALIASES) $(RUBY_BASE_NAME)/$(RUBY_PROGRAM_VERSION) $(RUBY_BASE_NAME)/vendor_ruby 2>$(NULL) || exit 0
 	$(Q)$(RMDIR) lib/$(RUBY_BASE_NAME) lib bin 2>$(NULL) || exit 0
 clean-ext:: PHONY
+	$(Q)$(RM) enc/encinit.$(OBJEXT)
 clean-golf: PHONY
 	$(Q)$(RM) $(GORUBY)$(EXEEXT) $(GOLFOBJS)
 clean-rdoc: PHONY
