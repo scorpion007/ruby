@@ -239,8 +239,6 @@ def install_recursive(srcdir, dest, options = {})
         stat = File.lstat(src) rescue next
         if stat.directory?
           files << [src, d, depth] if maxdepth != depth and /\A\./ !~ f and !prune[dir]
-        elsif stat.symlink?
-          # skip
         else
           files << [src, d, false] if File.fnmatch?(glob, f) and !skip[f]
         end
