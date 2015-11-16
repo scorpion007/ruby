@@ -1094,11 +1094,25 @@ register_init_ext(st_data_t *key, st_data_t *value, st_data_t init, int existing
     return ST_CONTINUE;
 }
 
+rb_ext_filter s_rb_ext_filter;
+
+/* this function allows filtering the registration of extensions for lockdown
+   purposes. Return non-zero to filter out an extension. */
+RUBY_FUNC_EXPORTED void
+ruby_set_ext_filter(rb_ext_filter filt)
+{
+    s_rb_ext_filter = filt;
+}
+
 RUBY_FUNC_EXPORTED void
 ruby_init_ext(const char *name, void (*init)(void))
 {
     st_table *loading_tbl = get_loading_table();
 
+    /* skip filtered extensions */
+    if (s_rb_ext_filter && s_rb_ext_filter(name))
+    return;
+    
     if (rb_provided(name))
 	return;
     st_update(loading_tbl, (st_data_t)name, register_init_ext, (st_data_t)init);
